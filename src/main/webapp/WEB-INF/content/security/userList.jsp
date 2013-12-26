@@ -45,7 +45,9 @@
 			cellspacing="0">
 			<tr>
 				<td align="left">
+				<shiro:hasPermission name="USEREDIT">
 					<input type='button' onclick="addNew('${ctx}/security/user/create')" class='button_70px' value='新建'/>
+				</shiro:hasPermission>
 					<input type='submit' class='button_70px' value='查询'/>
 				</td>
 			</tr>
@@ -85,8 +87,12 @@
 						${user.org.name}&nbsp;
 					</td>
 					<td class="td_list_2" align=left nowrap>
+					<shiro:hasPermission name="USERDELETE">
 						<a href="${ctx}/security/user/delete/${user.id }" class="btnDel" title="删除" onclick="return confirmDel();">删除</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="USEREDIT">
 						<a href="${ctx}/security/user/update/${user.id }" class="btnEdit" title="编辑">编辑</a>
+					</shiro:hasPermission>
 						<a href="${ctx}/security/user/view/${user.id }" class="btnView" title="查看">查看</a>
 					</td>
 				</tr>

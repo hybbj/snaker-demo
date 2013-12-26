@@ -38,7 +38,9 @@
 		<table align="center" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td align="left">
+				<shiro:hasPermission name="RESOURCEEDIT">
 					<input type='button' onclick="addNew('${ctx}/security/resource/create')" class='button_70px' value='新建'/>
+				</shiro:hasPermission>
 					<input type='submit' class='button_70px' value='查询'/>
 				</td>
 			</tr>
@@ -65,8 +67,12 @@
 						${resource.source}&nbsp;
 					</td>
 					<td class="td_list_2" align=left nowrap>
+					<shiro:hasPermission name="ORGDELETE">
 						<a href="${ctx}/security/resource/delete/${resource.id }" class="btnDel" title="删除" onclick="return confirmDel();">删除</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="RESOURCEDELETE">
 						<a href="${ctx}/security/resource/update/${resource.id }" class="btnEdit" title="编辑">编辑</a>
+					</shiro:hasPermission>
 						<a href="${ctx}/security/resource/view/${resource.id }" class="btnView" title="查看">查看</a>
 					</td>
 				</tr>

@@ -14,8 +14,8 @@
 						<span>任务2处理者列表：</span>
 					</td>
 					<td class="td_table_2" colspan="3">
-						<input type="checkbox" name="actorIds" value="admin" />系统管理员
-						<input type="checkbox" name="actorIds" value="test" />测试用户
+						<input type="checkbox" name="actorIds" value="snaker" />snaker
+						<input type="checkbox" name="actorIds" value="test" />test
 					</td>
 				</tr>
 			</table>

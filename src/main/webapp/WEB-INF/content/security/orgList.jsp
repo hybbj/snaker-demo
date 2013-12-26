@@ -42,7 +42,9 @@
 				<td align="left">
 				<c:choose>
 					<c:when test="${empty lookup}">
+					<shiro:hasPermission name="ORGEDIT">
 					<input type='button' onclick="addNew('${ctx}/security/org/create')" class='button_70px' value='新建'/>
+					</shiro:hasPermission>
 					</c:when>
 					<c:otherwise>
 					<input type='button' onclick="javascript:bringback('','')" class='button_70px' value='重置'/>
@@ -76,8 +78,12 @@
 					<td class="td_list_2" align=left nowrap>
 				    <c:choose>
 				    <c:when test="${empty lookup}">
+				    <shiro:hasPermission name="ORGDELETE">
 						<a href="${ctx}/security/org/delete/${org.id }" class="btnDel" title="删除" onclick="return confirmDel();">删除</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="ORGEDIT">
 						<a href="${ctx}/security/org/update/${org.id }" class="btnEdit" title="编辑">编辑</a>
+					</shiro:hasPermission>
 						<a href="${ctx}/security/org/view/${org.id }" class="btnView" title="查看">查看</a>
 					</c:when>
 					<c:otherwise>
