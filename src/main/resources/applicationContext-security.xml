@@ -19,6 +19,7 @@
 				/styles/** = anon
 				/common/** = anon
 				/index = authc
+				/** = user
 			</value>
 		</property>
 	</bean>
