@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.Page;
 import org.snaker.engine.core.ModelContainer;
@@ -15,6 +16,7 @@ import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.WorkItem;
+import org.snaker.engine.helper.StreamHelper;
 import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.ProcessModel;
 import org.snaker.framework.security.shiro.ShiroUtils;
@@ -110,7 +112,7 @@ public class SnakerController {
 	 */
 	@RequestMapping(value = "task/undo", method=RequestMethod.GET)
 	public String historyTaskUndo(String taskId) {
-		snakerEngine.withdrawTask(taskId, ShiroUtils.getUsername());
+		snakerEngine.task().withdrawTask(taskId, ShiroUtils.getUsername());
 		return "redirect:/snaker/task/active";
 	}
 	
@@ -158,6 +160,41 @@ public class SnakerController {
 	@RequestMapping(value = "process/add", method=RequestMethod.GET)
 	public String processAdd(Model model) {
 		return "snaker/processAdd";
+	}
+	
+	/**
+	 * 新建流程定义[web流程设计器]
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "process/designer", method=RequestMethod.GET)
+	public String processDesigner(String processId, Model model) {
+		if(StringUtils.isNotEmpty(processId)) {
+			ProcessModel processModel = ModelContainer.getEntity(processId).getModel();
+			if(model != null) {
+				model.addAttribute("process", SnakerJsonHelper.getModelJson(processModel));
+			}
+		}
+		return "snaker/processDesigner";
+	}
+	
+	/**
+	 * 保存流程定义[web流程设计器]
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "process/deployXml", method=RequestMethod.POST)
+	@ResponseBody
+	public boolean processDeploy(String model) {
+		try {
+			String xml = "<?xml version=\"1.0\" encoding=\"GBK\" standalone=\"no\"?>\n" + model;
+			InputStream input = StreamHelper.getStreamFromString(xml);
+			snakerEngine.process().deploy(input);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	/**
@@ -239,7 +276,6 @@ public class SnakerController {
 		}
 		return "redirect:/snaker/process/list";
 	}
-	
 	
 	@RequestMapping(value = "process/start", method=RequestMethod.GET)
 	public String processDeploy(Model model, String processId) {

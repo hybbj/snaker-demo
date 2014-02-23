@@ -69,10 +69,10 @@ public class FreeFlowController {
 			orderId = order.getId();
 		}
 		if(StringUtils.isNotEmpty(taskId)) {
-			snakerEngine.finishTask(taskId, ShiroUtils.getUsername(), null);
+			snakerEngine.task().complete(taskId, ShiroUtils.getUsername(), null);
 		}
 		if("close".equals(type)) {
-			snakerEngine.finishInstanceById(orderId);
+			snakerEngine.order().complete(orderId);
 		} else {
 			TaskModel model = new TaskModel();
 			model.setName(taskName);
