@@ -1,13 +1,13 @@
 (function($){
-var myflow = $.myflow;
+var snakerflow = $.snakerflow;
 
-$.extend(true, myflow.editors, {
+$.extend(true, snakerflow.editors, {
 	inputEditor : function(){
 		var _props,_k,_div,_src,_r;
 		this.init = function(props, k, div, src, r){
 			_props=props; _k=k; _div=div; _src=src; _r=r;
 			
-			$('<input style="width:100%;"/>').val(props[_k].value).change(function(){
+			$('<input style="width:98%;"/>').val(props[_k].value).change(function(){
 				props[_k].value = $(this).val();
 			}).appendTo('#'+_div);
 			
@@ -24,7 +24,7 @@ $.extend(true, myflow.editors, {
 		this.init = function(props, k, div, src, r){
 			_props=props; _k=k; _div=div; _src=src; _r=r;
 
-			var sle = $('<select  style="width:100%;"/>').val(props[_k].value).change(function(){
+			var sle = $('<select  style="width:99%;"/>').val(props[_k].value).change(function(){
 				props[_k].value = $(this).val();
 			}).appendTo('#'+_div);
 			
