@@ -264,6 +264,7 @@
 					alert(E.type+" 名称 不能为空");
 					return ""
 				}
+				if(o=="layout") continue;
 				if(E.props[o].value!=""){
 					r+=o+"=\""+E.props[o].value+"\" "
 				}
@@ -599,7 +600,10 @@
 				if(m[l].name=="name"&&m[l].value==""){
 					m[l].value=o.getId()
 				}
-				e.append("<tr><td class='td_table_1'>"+m[l].label+"</td><td class='td_table_2'><div id='p"+l+"' class='editor'></div></td></tr>");
+				if(!m[l].label){
+					continue;
+				}
+				e.append("<tr><td class='properties_name'>"+m[l].label+"</td><td class='properties_value'><div id='p"+l+"' class='editor'></div></td></tr>");
 				if(m[l].editor){
 					m[l].editor().init(m,l,"p"+l,o,g)
 				}
@@ -612,7 +616,7 @@
 			var d,e,c,g,f;
 			this.init=function(i,h,m,l,j){
 				d=i;e=h;c=m;g=l;f=j;
-				snaker('<input  style="width:98%;"/>').val(g.text()).change(function(){
+				snaker('<input style="width:98%;"/>').val(g.text()).change(function(){
 					i[e].value=snaker(this).val();
 					snaker(f).trigger("textchange",[snaker(this).val(),g])
 				}).appendTo("#"+c);

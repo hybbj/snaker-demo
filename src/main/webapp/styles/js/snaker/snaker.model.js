@@ -28,7 +28,7 @@ $.extend(true,snakerflow.config.tools.states,{
 				img : {src : 'images/48/start_event_empty.png',width : 48, height:48},
 				attr : {width:50 ,heigth:50 },
 				props : {
-					name: {name:'name',label: '名称', value:'start', editor: function(){return new snakerflow.editors.textEditor();}},
+					name: {name:'name',label: '名称', value:'start', editor: function(){return new snakerflow.editors.inputEditor();}},
 				    preInterceptors: {name:'preInterceptors', label : '前置拦截器', value:'', editor: function(){return new snakerflow.editors.inputEditor();}},
 					postInterceptors: {name:'postInterceptors', label : '后置拦截器', value:'', editor: function(){return new snakerflow.editors.inputEditor();}}
 				}},
@@ -40,7 +40,7 @@ $.extend(true,snakerflow.config.tools.states,{
 				img : {src : 'images/48/end_event_terminate.png',width : 48, height:48},
 				attr : {width:50 ,heigth:50 },
 				props : {
-					name: {name:'name',label: '名称', value:'end', editor: function(){return new snakerflow.editors.textEditor();}},
+					name: {name:'name',label: '名称', value:'end', editor: function(){return new snakerflow.editors.inputEditor();}},
 				    preInterceptors: {name:'preInterceptors', label : '前置拦截器', value:'', editor: function(){return new snakerflow.editors.inputEditor();}},
 					postInterceptors: {name:'postInterceptors', label : '后置拦截器', value:'', editor: function(){return new snakerflow.editors.inputEditor();}}
 				}},

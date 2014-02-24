@@ -84,14 +84,14 @@ body {
 	text-align:left;
 	background-color: #CDF07F;
 }
-.table_all {
+.properties_all {
 	border-right:1px solid #9AC3E1;
 	width:100%;
 	text-align:left;
 	font-family: Arial, sans-serif, Helvetica, Tahoma;
 	font-size: 12px;
 }
-.td_table_1 {
+.properties_name {
 	background-color:#CDF07F;
 	border-left:1px solid #9AC3E1;
 	border-bottom:1px solid #9AC3E1;
@@ -100,7 +100,7 @@ body {
 	text-align:left;
 	width:100px;
 }
-.td_table_2 {
+.properties_value {
 	border-left:1px solid #9AC3E1;
 	border-bottom:1px solid #9AC3E1;
 	height: 24px;

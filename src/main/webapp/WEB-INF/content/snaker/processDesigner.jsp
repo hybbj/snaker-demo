@@ -36,6 +36,7 @@
 			});
 			
 			function saveModel(data) {
+				alert(data);
 				$.ajax({
 					type:'POST',
 					url:"${ctx}/snaker/process/deployXml",
@@ -91,7 +92,7 @@
 
 <div id="properties">
 <div id="properties_handle">属性</div>
-<table class="table_all" cellpadding="0" cellspacing="0">
+<table class="properties_all" cellpadding="0" cellspacing="0">
 </table>
 <div>&nbsp;</div>
 </div>

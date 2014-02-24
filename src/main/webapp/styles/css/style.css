@@ -408,6 +408,17 @@ a.btnReject {
 	margin-right: 3px;
 }
 
+a.btnDesigner {
+	background:url(../images/designer.png) no-repeat; 
+	display:block; 
+	width:22px; 
+	height:20px; 
+	text-indent:-1000px; 
+	overflow:hidden; 
+	float:left; 
+	margin-right: 3px;
+}
+
 #switchpic {
 	width: 6px;
 	cursor:pointer;

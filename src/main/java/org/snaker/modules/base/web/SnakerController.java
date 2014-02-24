@@ -179,6 +179,53 @@ public class SnakerController {
 	}
 	
 	/**
+	 * 编辑流程定义
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "process/edit/{id}", method=RequestMethod.GET)
+	public String processEdit(Model model, @PathVariable("id") String id) {
+		Process process = snakerEngine.process().getProcess(id);
+		model.addAttribute("process", process);
+		if(process.getDBContent() != null) {
+			try {
+				model.addAttribute("content", StringHelper.textXML(new String(process.getDBContent(), "GBK")));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		return "snaker/processEdit";
+	}
+	
+	/**
+	 * 根据流程定义ID，删除流程定义
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "process/delete/{id}", method=RequestMethod.GET)
+	public String processDelete(@PathVariable("id") String id) {
+		snakerEngine.process().undeploy(id);
+		return "redirect:/snaker/process/list";
+	}
+	
+	/**
+	 * 添加流程定义后的部署
+	 * @param snakerFile
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "process/deploy", method=RequestMethod.POST)
+	public String processDeploy(@RequestParam(value = "snakerFile") MultipartFile snakerFile, Model model) {
+		try {
+			InputStream input = snakerFile.getInputStream();
+			snakerEngine.process().deploy(input);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/snaker/process/list";
+	}
+	
+	/**
 	 * 保存流程定义[web流程设计器]
 	 * @param model
 	 * @return
@@ -211,74 +258,8 @@ public class SnakerController {
 		return "redirect:/snaker/process/list";
 	}
 	
-	/**
-	 * 编辑流程定义
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "process/edit/{id}", method=RequestMethod.GET)
-	public String processEdit(Model model, @PathVariable("id") String id) {
-		Process process = snakerEngine.process().getProcess(id);
-		model.addAttribute("process", process);
-		if(process.getDBContent() != null) {
-			try {
-				model.addAttribute("content", StringHelper.textXML(new String(process.getDBContent(), "GBK")));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
-		return "snaker/processEdit";
-	}
-	
-	/**
-	 * 更新流程定义
-	 * @param process
-	 * @return
-	 */
-	@RequestMapping(value = "process/update", method = RequestMethod.POST)
-	public String processUpdate(@RequestParam(value = "snakerFile") MultipartFile snakerFile, Process process) {
-		Process db = snakerEngine.process().getProcess(process.getId());
-		db.setQueryUrl(process.getQueryUrl());
-		if(snakerFile != null) {
-			try {
-				snakerEngine.process().update(db, snakerFile.getInputStream());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return "redirect:/snaker/process/list";
-	}
-	
-	/**
-	 * 根据流程定义ID，删除流程定义
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "process/delete/{id}", method=RequestMethod.GET)
-	public String processDelete(@PathVariable("id") String id) {
-		snakerEngine.process().undeploy(id);
-		return "redirect:/snaker/process/list";
-	}
-	
-	/**
-	 * 添加流程定义后的部署
-	 * @param snakerFile
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "process/deploy", method=RequestMethod.POST)
-	public String processDeploy(@RequestParam(value = "snakerFile") MultipartFile snakerFile, Model model) {
-		try {
-			InputStream input = snakerFile.getInputStream();
-			snakerEngine.process().deploy(input);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return "redirect:/snaker/process/list";
-	}
-	
 	@RequestMapping(value = "process/start", method=RequestMethod.GET)
-	public String processDeploy(Model model, String processId) {
+	public String processStart(Model model, String processId) {
 		snakerEngine.startInstanceById(processId);
 		return "redirect:/snaker/process/list";
 	}

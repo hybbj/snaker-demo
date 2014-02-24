@@ -14,9 +14,12 @@
  */
 package org.snaker.modules.base.helper;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.model.CustomModel;
@@ -31,7 +34,6 @@ import org.snaker.engine.model.TransitionModel;
  * @version 1.0
  */
 public class SnakerJsonHelper {
-	//{"activeRects":{"rects":[{"paths":[],"name":"任务3"},{"paths":[],"name":"任务4"},{"paths":[],"name":"任务2"}]},"historyRects":{"rects":[{"paths":["TO 任务1"],"name":"开始"},{"paths":["TO 分支"],"name":"任务1"},{"paths":["TO 任务3","TO 任务4","TO 任务2"],"name":"分支"}]}}
 	public static String getActiveJson(List<Task> tasks) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("{'activeRects':{'rects':[");
@@ -70,7 +72,6 @@ public class SnakerJsonHelper {
 		buffer.append("'}}}}");
 		return buffer.toString();
 	}
-	//start:{type:'start',text:{text:'start'}, attr:{ x:164, y:83, width:50, height:50}, props:{name:{value:'start'}}}
 	public static String getNodeJson(List<NodeModel> nodes) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("states: {");
@@ -136,11 +137,29 @@ public class SnakerJsonHelper {
 	
 	private static String getProperty(NodeModel node) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("props:{name:{value:'");
-		buffer.append(node.getName());
-		buffer.append("'},displayName:{value:'");
-		buffer.append(node.getDisplayName());
-		buffer.append("'}}}");
+		buffer.append("props:{");
+		try {
+		PropertyDescriptor[] beanProperties = PropertyUtils.getPropertyDescriptors(node);
+		for (PropertyDescriptor propertyDescriptor : beanProperties) {
+			if(propertyDescriptor.getReadMethod() == null || propertyDescriptor.getWriteMethod() == null)
+				continue;
+			if(propertyDescriptor.getPropertyType() == String.class) {
+				String name = propertyDescriptor.getName();
+				String value = (String)BeanUtils.getProperty(node, name);
+				if(value == null || value.equals("")) continue;
+				buffer.append(name);
+				buffer.append(":{value:'");
+				buffer.append(value);
+				buffer.append("'},");
+			} else {
+				continue;
+			}
+		}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		buffer.deleteCharAt(buffer.length() - 1);
+		buffer.append("}}");
 		return buffer.toString();
 	}
 	

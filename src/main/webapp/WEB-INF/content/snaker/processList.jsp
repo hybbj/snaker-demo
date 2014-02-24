@@ -81,7 +81,7 @@
 						<a href="${ctx}${empty process.instanceUrl ? '/snaker/process/start' : process.instanceUrl}?processId=${process.id }" class="btnStart" title="启动流程">启动流程</a>
 						<shiro:hasPermission name="PROCESSDEPLOY">
 						<a href="${ctx}/snaker/process/edit/${process.id }" class="btnEdit" title="编辑">编辑</a>
-						<a href="${ctx}/snaker/process/designer?processId=${process.id }" class="btnEdit" title="设计">设计</a>
+						<a href="${ctx}/snaker/process/designer?processId=${process.id }" class="btnDesigner" title="设计">设计</a>
 						<a href="${ctx}/snaker/process/delete/${process.id }" class="btnDel" title="删除" onclick="return confirmDel();">删除</a>
 						</shiro:hasPermission>
 					</td>
