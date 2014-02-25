@@ -172,7 +172,9 @@ public class SnakerController {
 		if(StringUtils.isNotEmpty(processId)) {
 			ProcessModel processModel = ModelContainer.getEntity(processId).getModel();
 			if(model != null) {
-				model.addAttribute("process", SnakerJsonHelper.getModelJson(processModel));
+				String json = SnakerJsonHelper.getModelJson(processModel);
+				model.addAttribute("process", json);
+				System.out.println(json);
 			}
 		}
 		return "snaker/processDesigner";
@@ -235,6 +237,7 @@ public class SnakerController {
 	public boolean processDeploy(String model) {
 		try {
 			String xml = "<?xml version=\"1.0\" encoding=\"GBK\" standalone=\"no\"?>\n" + model;
+			System.out.println("model xml=\n" + xml);
 			InputStream input = StreamHelper.getStreamFromString(xml);
 			snakerEngine.process().deploy(input);
 		} catch (Exception e) {

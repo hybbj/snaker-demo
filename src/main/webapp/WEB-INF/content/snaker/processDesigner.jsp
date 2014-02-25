@@ -16,9 +16,9 @@
 		<script type="text/javascript">
 			$(function() {
 				var json="${process }";
-				alert(json);
 				var model;
 				if(json) {
+					//json.replace(new RegExp("@@","gm"), "\"")
 					model=eval("(" + json + ")");
 				} else {
 					model="";
@@ -51,6 +51,8 @@
 					success: function(data){
 						if(data == true) {
 							window.location.href = "${ctx}/snaker/process/list";
+						} else {
+							alert('数据处理错误！');
 						}
 					}
 				});

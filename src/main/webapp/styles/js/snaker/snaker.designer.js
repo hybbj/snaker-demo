@@ -600,6 +600,7 @@
 				if(m[l].name=="name"&&m[l].value==""){
 					m[l].value=o.getId()
 				}
+				m[l].value=m[l].value.replace(new RegExp("@@","gm"), "'");
 				if(!m[l].label){
 					continue;
 				}
@@ -751,11 +752,11 @@
 									}else{
 										i+="\n";
 										i+=transitionXml;
-										i+="\n";
 									}
 								}
 							}
 						}
+						i+="\n";
 						i+=q[node].toAfterXml();
 						i+="\n";
 					}

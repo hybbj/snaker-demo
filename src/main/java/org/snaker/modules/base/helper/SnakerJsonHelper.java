@@ -149,6 +149,9 @@ public class SnakerJsonHelper {
 				if(value == null || value.equals("")) continue;
 				buffer.append(name);
 				buffer.append(":{value:'");
+				if(value.indexOf("'") != -1) {
+					value = value.replaceAll("'", "@@");
+				}
 				buffer.append(value);
 				buffer.append("'},");
 			} else {
