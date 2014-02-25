@@ -3,4 +3,5 @@
 <config>
 	<bean class="org.snaker.engine.access.dialect.MySqlDialect"/>
 	<bean class="org.snaker.engine.impl.LogInterceptor"/>
+	<bean class="org.snaker.engine.spring.SpelExpression"/>
 </config>

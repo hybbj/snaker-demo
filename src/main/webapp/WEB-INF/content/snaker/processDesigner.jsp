@@ -16,6 +16,7 @@
 		<script type="text/javascript">
 			$(function() {
 				var json="${process }";
+				alert(json);
 				var model;
 				if(json) {
 					model=eval("(" + json + ")");
