@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.SnakerEngine;
-import org.snaker.engine.core.ModelContainer;
+import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
@@ -43,7 +43,7 @@ public class ForkJoinController {
 	private SnakerEngine snakerEngine;
 	@RequestMapping(value = "all", method=RequestMethod.GET)
 	public String all(Model model, String processId, String orderId, String taskId) {
-		Process process = ModelContainer.getEntity(processId);
+		Process process = snakerEngine.process().getProcessById(processId);
 		List<WorkModel> models = process.getModel().getWorkModels();
 		model.addAttribute("works", models);
 		model.addAttribute("process", process);
@@ -53,8 +53,10 @@ public class ForkJoinController {
 			model.addAttribute("order", order);
 			model.addAttribute("task", task);
 		} else {
-			Order order = snakerEngine.startInstanceById(processId, ShiroUtils.getUsername());
-			List<Task> tasks = snakerEngine.query().getActiveTasks(order.getId());
+			Map<String, Object> args = new HashMap<String, Object>();
+			args.put("task1.operator", ShiroUtils.getUsername());
+			Order order = snakerEngine.startInstanceById(processId, ShiroUtils.getUsername(), args);
+			List<Task> tasks = snakerEngine.query().getActiveTasks(new QueryFilter().setOrderId(order.getId()));
 			model.addAttribute("order", order);
 			if(tasks != null && tasks.size() > 0) {
 				model.addAttribute("task", tasks.get(0));

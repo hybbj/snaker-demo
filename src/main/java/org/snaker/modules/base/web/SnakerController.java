@@ -10,12 +10,13 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.SnakerEngine;
 import org.snaker.engine.access.Page;
-import org.snaker.engine.core.ModelContainer;
+import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryOrder;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Process;
 import org.snaker.engine.entity.Task;
 import org.snaker.engine.entity.WorkItem;
+import org.snaker.engine.helper.AssertHelper;
 import org.snaker.engine.helper.StreamHelper;
 import org.snaker.engine.helper.StringHelper;
 import org.snaker.engine.model.ProcessModel;
@@ -47,7 +48,8 @@ public class SnakerController {
 	 */
 	@RequestMapping(value = "task/user", method=RequestMethod.GET)
 	public String userTaskList(Model model, Page<WorkItem> page) {
-		snakerEngine.query().getWorkItems(page, null, ShiroUtils.getUsername());
+		snakerEngine.query().getWorkItems(page, 
+				new QueryFilter().setOperators(new String[]{ShiroUtils.getUsername()}));
 		model.addAttribute("page", page);
 		return "snaker/userTask";
 	}
@@ -59,7 +61,8 @@ public class SnakerController {
 	 */
 	@RequestMapping(value = "task/active", method=RequestMethod.GET)
 	public String activeTaskList(Model model, Page<WorkItem> page, String error) {
-		snakerEngine.query().getWorkItems(page, null, ShiroUtils.getUsername());
+		snakerEngine.query().getWorkItems(page, 
+				new QueryFilter().setOperators(new String[]{ShiroUtils.getUsername()}));
 		model.addAttribute("page", page);
 		model.addAttribute("error", error);
 		return "snaker/activeTask";
@@ -100,7 +103,8 @@ public class SnakerController {
 	 */
 	@RequestMapping(value = "task/history", method=RequestMethod.GET)
 	public String historyTaskList(Model model, Page<WorkItem> page) {
-		snakerEngine.query().getHistoryWorkItems(page, null, ShiroUtils.getUsername());
+		snakerEngine.query().getHistoryWorkItems(page, 
+				new QueryFilter().setOperators(new String[]{ShiroUtils.getUsername()}));
 		model.addAttribute("page", page);
 		return "snaker/historyTask";
 	}
@@ -124,7 +128,7 @@ public class SnakerController {
 	 */
 	@RequestMapping(value = "order", method=RequestMethod.GET)
 	public String order(Model model, Page<HistoryOrder> page) {
-		snakerEngine.query().getHistoryOrders(page);
+		snakerEngine.query().getHistoryOrders(page, new QueryFilter());
 		model.addAttribute("page", page);
 		return "snaker/order";
 	}
@@ -137,7 +141,12 @@ public class SnakerController {
 	@RequestMapping(value = "process/list", method=RequestMethod.GET)
 	public String processList(Model model, Page<Process> page, String name, Integer state) {
 		if(state == null) state = 1;
-		snakerEngine.process().getProcesss(page, name, state);
+		QueryFilter filter = new QueryFilter();
+		filter.setState(state);
+		if(StringHelper.isNotEmpty(name)) {
+			filter.setNames(new String[]{name});
+		}
+		snakerEngine.process().getProcesss(page, filter);
 		model.addAttribute("page", page);
 		return "snaker/processList";
 	}
@@ -170,7 +179,9 @@ public class SnakerController {
 	@RequestMapping(value = "process/designer", method=RequestMethod.GET)
 	public String processDesigner(String processId, Model model) {
 		if(StringUtils.isNotEmpty(processId)) {
-			ProcessModel processModel = ModelContainer.getEntity(processId).getModel();
+			Process process = snakerEngine.process().getProcessById(processId);
+			AssertHelper.notNull(process);
+			ProcessModel processModel = process.getModel();
 			if(model != null) {
 				String json = SnakerJsonHelper.getModelJson(processModel);
 				model.addAttribute("process", json);
@@ -187,7 +198,7 @@ public class SnakerController {
 	 */
 	@RequestMapping(value = "process/edit/{id}", method=RequestMethod.GET)
 	public String processEdit(Model model, @PathVariable("id") String id) {
-		Process process = snakerEngine.process().getProcess(id);
+		Process process = snakerEngine.process().getProcessById(id);
 		model.addAttribute("process", process);
 		if(process.getDBContent() != null) {
 			try {
@@ -257,7 +268,6 @@ public class SnakerController {
 		process.setId(StringHelper.getPrimaryKey());
 		process.setState(1);
 		snakerEngine.process().saveProcess(process);
-		ModelContainer.pushEntity(process.getId(), process);
 		return "redirect:/snaker/process/list";
 	}
 	
@@ -271,8 +281,10 @@ public class SnakerController {
 	@ResponseBody
 	public Object json(String orderId) {
 		HistoryOrder order = snakerEngine.query().getHistOrder(orderId);
-		List<Task> tasks = snakerEngine.query().getActiveTasks(orderId);
-		ProcessModel model = ModelContainer.getEntity(order.getProcessId()).getModel();
+		List<Task> tasks = snakerEngine.query().getActiveTasks(new QueryFilter().setOrderId(orderId));
+		Process process = snakerEngine.process().getProcessById(order.getProcessId());
+		AssertHelper.notNull(process);
+		ProcessModel model = process.getModel();
 		Map<String, String> jsonMap = new HashMap<String, String>();
 		if(model != null) {
 			jsonMap.put("process", SnakerJsonHelper.getModelJson(model));
@@ -289,7 +301,7 @@ public class SnakerController {
 	public String display(Model model, String orderId) {
 		HistoryOrder order = snakerEngine.query().getHistOrder(orderId);
 		model.addAttribute("order", order);
-		List<HistoryTask> tasks = snakerEngine.query().getHistoryTasks(orderId);
+		List<HistoryTask> tasks = snakerEngine.query().getHistoryTasks(new QueryFilter().setOrderId(orderId));
 		model.addAttribute("tasks", tasks);
 		return "snaker/processView";
 	}

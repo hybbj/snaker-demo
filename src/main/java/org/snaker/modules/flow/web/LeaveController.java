@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.snaker.engine.SnakerEngine;
+import org.snaker.engine.access.QueryFilter;
 import org.snaker.engine.entity.HistoryTask;
 import org.snaker.engine.entity.Order;
 import org.snaker.engine.entity.Task;
@@ -80,7 +81,7 @@ public class LeaveController {
 		args.put("day", day);
 		args.put("reason", reason);
 		
-		List<Task> tasks = snakerEngine.query().getActiveTasks(orderId);
+		List<Task> tasks = snakerEngine.query().getActiveTasks(new QueryFilter().setOrderId(orderId));
 		if(tasks != null && tasks.size() > 0) {
 			Task task = tasks.get(0);
 			//执行申请任务
@@ -99,7 +100,7 @@ public class LeaveController {
 	public String approveDept(Model model, String orderId, String taskId) {
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
-		List<HistoryTask> tasks = snakerEngine.query().getHistoryTasks(orderId);
+		List<HistoryTask> tasks = snakerEngine.query().getHistoryTasks(new QueryFilter().setOrderId(orderId));
 		for(HistoryTask history : tasks) {
 			HashMap<String, Object> variable = JsonHelper.fromJson(history.getVariable(), HashMap.class);
 			for(Entry<String, Object> entry : variable.entrySet()) {
@@ -146,7 +147,7 @@ public class LeaveController {
 	public String approveBoss(Model model, String orderId, String taskId) {
 		model.addAttribute("orderId", orderId);
 		model.addAttribute("taskId", taskId);
-		List<HistoryTask> tasks = snakerEngine.query().getHistoryTasks(orderId);
+		List<HistoryTask> tasks = snakerEngine.query().getHistoryTasks(new QueryFilter().setOrderId(orderId));
 		for(HistoryTask history : tasks) {
 			HashMap<String, Object> variable = JsonHelper.fromJson(history.getVariable(), HashMap.class);
 			for(Entry<String, Object> entry : variable.entrySet()) {
