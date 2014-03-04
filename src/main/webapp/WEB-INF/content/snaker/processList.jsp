@@ -32,6 +32,7 @@
 					<input type="text" class="input_240" name="name" value="${param['name']}"/>
 				</td>
 			</tr>
+			<!-- 
 			<tr>
 				<td class="td_table_1">
 					<span>状态：</span>
@@ -41,6 +42,7 @@
 					<input type="radio" name="state" value="0" ${param['state'] == 0 ? 'checked' : '' }/>禁用	
 				</td>
 			</tr>
+			 -->
 		</table>
 		<table align="center" border="0" cellpadding="0"
 			cellspacing="0">
@@ -48,8 +50,9 @@
 				<td align="left">
 				<shiro:hasPermission name="PROCESSDEPLOY">
 					<input type='button' onclick="addNew('${ctx}/snaker/process/designer')" class='button_70px' value='设计'/>
-					<input type='button' onclick="addNew('${ctx}/snaker/process/add')" class='button_70px' value='新建'/>
+					<%-- <input type='button' onclick="addNew('${ctx}/snaker/process/add')" class='button_70px' value='新建'/> --%>
 					<input type='button' onclick="addNew('${ctx}/snaker/process/deploy')" class='button_70px' value='部署'/>
+					<input type='button' onclick="addNew('${ctx}/snaker/process/init')" class='button_70px' value='初始化'/>
 				</shiro:hasPermission>
 					<input type='submit' class='button_70px' value='查询'/>
 				</td>
@@ -64,7 +67,12 @@
 				<td align=center width=20% class="td_list_1" nowrap>
 					流程显示名称
 				</td>
-				
+				<td align=center width=30% class="td_list_1" nowrap>
+					状态
+				</td>
+				<td align=center width=20% class="td_list_1" nowrap>
+					版本号
+				</td>
 				<td align=center width=10% class="td_list_1" nowrap>
 					操作
 				</td>				
@@ -77,6 +85,12 @@
 					<td class="td_list_2" align=left nowrap>
 						${process.displayName}&nbsp;
 					</td>
+					<td class="td_list_2" align=left nowrap>
+						${process.state == 1 ? '启用' : '禁用'}&nbsp;
+					</td>
+					<td class="td_list_2" align=left nowrap>
+						${process.version}&nbsp;
+					</td>					
 					<td class="td_list_2" align=left nowrap>
 						<a href="${ctx}${empty process.instanceUrl ? '/snaker/process/start' : process.instanceUrl}?processId=${process.id }" class="btnStart" title="启动流程">启动流程</a>
 						<shiro:hasPermission name="PROCESSDEPLOY">

@@ -70,16 +70,15 @@ public class LeaveController {
 	@RequestMapping(value = "apply/save" ,method=RequestMethod.POST)
 	public String applySave(Model model, String processId, String orderId, float day, String reason) {
 		User user = ShiroUtils.getUser();
-		if(StringUtils.isEmpty(orderId)) {
-			Order order = snakerEngine.startInstanceById(processId, user.getUsername());
-			orderId = order.getId();
-		}
-		
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("apply.operator", user.getUsername());
 		args.put("approveDept.operator", user.getUsername());
 		args.put("day", day);
 		args.put("reason", reason);
+		if(StringUtils.isEmpty(orderId)) {
+			Order order = snakerEngine.startInstanceById(processId, user.getUsername(), args);
+			orderId = order.getId();
+		}
 		
 		List<Task> tasks = snakerEngine.query().getActiveTasks(new QueryFilter().setOrderId(orderId));
 		if(tasks != null && tasks.size() > 0) {

@@ -139,16 +139,27 @@ public class SnakerController {
 	 * @return
 	 */
 	@RequestMapping(value = "process/list", method=RequestMethod.GET)
-	public String processList(Model model, Page<Process> page, String name, Integer state) {
-		if(state == null) state = 1;
+	public String processList(Model model, Page<Process> page, String name) {
 		QueryFilter filter = new QueryFilter();
-		filter.setState(state);
 		if(StringHelper.isNotEmpty(name)) {
 			filter.setNames(new String[]{name});
 		}
 		snakerEngine.process().getProcesss(page, filter);
 		model.addAttribute("page", page);
 		return "snaker/processList";
+	}
+	
+	/**
+	 * 初始化流程定义
+	 * @return
+	 */
+	@RequestMapping(value = "process/init", method=RequestMethod.GET)
+	public String processInit() {
+		snakerEngine.process().deploy(StreamHelper.getStreamFromClasspath("flows/leave.snaker"));
+		snakerEngine.process().deploy(StreamHelper.getStreamFromClasspath("flows/forkjoin.snaker"));
+		snakerEngine.process().deploy(StreamHelper.getStreamFromClasspath("flows/custom.snaker"));
+		snakerEngine.process().deploy(StreamHelper.getStreamFromClasspath("flows/actorall.snaker"));
+		return "redirect:/snaker/process/list";
 	}
 	
 	/**
