@@ -73,6 +73,7 @@ public class LeaveController {
 		Map<String, Object> args = new HashMap<String, Object>();
 		args.put("apply.operator", user.getUsername());
 		args.put("approveDept.operator", user.getUsername());
+		args.put("approveBoss.operator", user.getUsername());
 		args.put("day", day);
 		args.put("reason", reason);
 		if(StringUtils.isEmpty(orderId)) {
@@ -122,10 +123,7 @@ public class LeaveController {
 	@RequestMapping(value = "approveDept/save" ,method=RequestMethod.POST)
 	public String approveDeptSave(Model model, HttpServletRequest request, float day) {
 		Map<String, Object> args = new HashMap<String, Object>();
-		args.put("apply.operator", ShiroUtils.getUsername());
 		args.put("approveDept.suggest", request.getParameter("approveDept.suggest"));
-		args.put("approveBoss.operator", ShiroUtils.getUsername());
-		args.put("day", day);
 		String departmentResult = request.getParameter("departmentResult");
 		if(departmentResult.equals("-2")) {
 			snakerEngine.executeAndJumpTask(request.getParameter("taskId"), ShiroUtils.getUsername(), args, null);

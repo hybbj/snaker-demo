@@ -139,10 +139,10 @@ public class SnakerController {
 	 * @return
 	 */
 	@RequestMapping(value = "process/list", method=RequestMethod.GET)
-	public String processList(Model model, Page<Process> page, String name) {
+	public String processList(Model model, Page<Process> page, String displayName) {
 		QueryFilter filter = new QueryFilter();
-		if(StringHelper.isNotEmpty(name)) {
-			filter.setNames(new String[]{name});
+		if(StringHelper.isNotEmpty(displayName)) {
+			filter.setDisplayName(displayName);
 		}
 		snakerEngine.process().getProcesss(page, filter);
 		model.addAttribute("page", page);
@@ -193,7 +193,7 @@ public class SnakerController {
 			Process process = snakerEngine.process().getProcessById(processId);
 			AssertHelper.notNull(process);
 			ProcessModel processModel = process.getModel();
-			if(model != null) {
+			if(processModel != null) {
 				String json = SnakerJsonHelper.getModelJson(processModel);
 				model.addAttribute("process", json);
 				System.out.println(json);

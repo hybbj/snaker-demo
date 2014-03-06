@@ -29,7 +29,7 @@
 					<span>流程名称：</span>
 				</td>
 				<td class="td_table_2">
-					<input type="text" class="input_240" name="name" value="${param['name']}"/>
+					<input type="text" class="input_240" name="displayName" value="${param['displayName']}"/>
 				</td>
 			</tr>
 			<!-- 
