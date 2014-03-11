@@ -44,7 +44,7 @@
 			}
 		},
 		props:{
-			attr:{top:10,right:10},
+			attr:{top:328,left:10},
 			props:{}
 		},
 		restore:"",

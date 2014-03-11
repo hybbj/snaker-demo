@@ -41,7 +41,7 @@
 				$.ajax({
 					type:'POST',
 					url:"${ctx}/snaker/process/deployXml",
-					data:"model=" + data,
+					data:"model=" + data + "&id=${processId}",
 					async: false,
 					globle:false,
 					error: function(){

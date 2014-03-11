@@ -198,6 +198,7 @@ public class SnakerController {
 				model.addAttribute("process", json);
 				System.out.println(json);
 			}
+			model.addAttribute("processId", processId);
 		}
 		return "snaker/processDesigner";
 	}
@@ -239,10 +240,14 @@ public class SnakerController {
 	 * @return
 	 */
 	@RequestMapping(value = "process/deploy", method=RequestMethod.POST)
-	public String processDeploy(@RequestParam(value = "snakerFile") MultipartFile snakerFile, Model model) {
+	public String processDeploy(@RequestParam(value = "snakerFile") MultipartFile snakerFile, String id) {
 		try {
 			InputStream input = snakerFile.getInputStream();
-			snakerEngine.process().deploy(input);
+			if(StringUtils.isNotEmpty(id)) {
+				snakerEngine.process().redeploy(id, input);
+			} else {
+				snakerEngine.process().deploy(input);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -256,12 +261,16 @@ public class SnakerController {
 	 */
 	@RequestMapping(value = "process/deployXml", method=RequestMethod.POST)
 	@ResponseBody
-	public boolean processDeploy(String model) {
+	public boolean processDeploy(String model, String id) {
 		try {
 			String xml = "<?xml version=\"1.0\" encoding=\"GBK\" standalone=\"no\"?>\n" + model;
 			System.out.println("model xml=\n" + xml);
 			InputStream input = StreamHelper.getStreamFromString(xml);
-			snakerEngine.process().deploy(input);
+			if(StringUtils.isNotEmpty(id)) {
+				snakerEngine.process().redeploy(id, input);
+			} else {
+				snakerEngine.process().deploy(input);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;

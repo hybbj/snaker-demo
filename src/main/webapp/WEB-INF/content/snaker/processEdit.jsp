@@ -14,6 +14,7 @@
 
 	<body>
 		<form id="inputForm" action="${ctx }/snaker/process/deploy" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="id" value="${process.id }">
 		<table width="100%" border="0" align="center" cellpadding="0"
 				class="table_all_border" cellspacing="0" style="margin-bottom: 0px;border-bottom: 0px">
 			<tr>

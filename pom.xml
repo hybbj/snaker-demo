@@ -22,7 +22,7 @@
 		<dependency>
 		  <groupId>com.github.snakerflow</groupId>
 		  <artifactId>snaker-core</artifactId>
-		  <version>1.3-beta</version>
+		  <version>1.3.0</version>
 		</dependency>
 		<!-- spring begin -->
 		<dependency>
