@@ -258,7 +258,7 @@
 			return r
 		};
 		this.toBeforeXml=function(){
-			var r="<"+E.type+" layout=\""+(Math.round(t.attr("x"))-120)+","+Math.round(t.attr("y"))+","+Math.round(t.attr("width"))+","+Math.round(t.attr("height"))+"\" ";
+			var r="<"+E.type+" layout=\""+(Math.round(t.attr("x"))-180)+","+Math.round(t.attr("y"))+","+Math.round(t.attr("width"))+","+Math.round(t.attr("height"))+"\" ";
 			for(var o in E.props){
 				if(o=="name"&&E.props[o].value==""){
 					alert(E.type+" 名称 不能为空");
@@ -380,7 +380,7 @@
 				var G="",H=D;
 				while(H){
 					if(H.type()=="big"){
-						G+=(Math.round(H.pos().x)-120)+","+Math.round(H.pos().y)+";"
+						G+=(Math.round(H.pos().x)-180)+","+Math.round(H.pos().y)+";"
 					}
 					H=H.right()
 				}
@@ -526,16 +526,18 @@
 		};
 		
 		this.toXml=function(){
-			var r="<transition offset=\""+(Math.round(h.x)-120)+","+Math.round(h.y)+"\" to=\""+s.getName()+"\" ";
+			var hx = Math.round(h.x);
+			var r="<transition offset=\""+hx+","+Math.round(h.y)+"\" to=\""+s.getName()+"\" ";
 			var dots=x.toXml();
 			if(dots!="") r+=" g=\""+x.toXml()+"\" ";
 			for(var o in B.props){
+				alert(o + "=" + B.props[o].value)
 				if(o=="name"&&B.props[o].value==""){
 					r+=o+"=\""+g+"\" ";
 					continue;
 				}
 				if(B.props[o].value!=""){
-					r+=o+"=\""+B.props[o].value+"\" "
+					r+=o+"=\""+B.props[o].value+"\" ";
 				}
 			}
 			r+="/>";
@@ -543,6 +545,7 @@
 		};
 		this.restore=function(o){
 			var r=o;
+			B.props.displayName.value=r.text.text;
 			B=snaker.extend(true,B,o);
 			x.restore(r.dots)
 		};

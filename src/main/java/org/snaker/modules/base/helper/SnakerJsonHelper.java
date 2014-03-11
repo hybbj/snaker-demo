@@ -113,7 +113,7 @@ public class SnakerJsonHelper {
 			buffer.append("'},textPos:{");
 			if(StringUtils.isNotEmpty(tm.getOffset())) {
 				String[] values = tm.getOffset().split(",");
-				buffer.append("x:").append(getNumber(values[0])).append(",");
+				buffer.append("x:").append(values[0]).append(",");
 				buffer.append("y:").append(values[1]).append("");
 			}
 			buffer.append("}, props:{name:{value:'" + tm.getName() + "'}}}");
